@@ -176,7 +176,7 @@ export default function ResetPassword() {
 					<div className="bg-primary p-3 mt-4 w-full text-center">
 						<p className="text-primary-1 text-sm">
 							Experiencing issues signing in?{" "}
-							<Link href="/" className="underline">
+							<Link href="https://www.quanskill.com/contact-us" className="underline">
 								Contact Support
 							</Link>
 						</p>
