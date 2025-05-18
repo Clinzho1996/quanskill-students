@@ -140,7 +140,7 @@ export function EventCalendar() {
 							return (
 								<div
 									className={cn(
-										"relative h-14 w-full p-0 text-center flex items-center justify-center",
+										"relative h-14 w-full p-0 text-center flex items-center justify-center cursor-pointer",
 										hasEvent && "border-2 border-[#6E3FF3] rounded-lg"
 									)}
 									onClick={() => handleDayClick(props.date)}>
