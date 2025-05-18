@@ -20,7 +20,7 @@ export default function ForgotPassword() {
 	useEffect(() => {
 		if (status === "authenticated") {
 			toast.success("Login Successful!");
-			router.push("/dashboard");
+			router.push("/");
 		}
 	}, [status, router]);
 

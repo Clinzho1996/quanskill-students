@@ -4,15 +4,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
 import Loader from "@/components/Loader";
-import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IconTrash } from "@tabler/icons-react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { ScheduleDataTable } from "./schedule-table";
 
 // Define the expected API response type
@@ -53,34 +50,9 @@ declare module "next-auth" {
 const ScheduleTable = () => {
 	const { id } = useParams();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-	const [selectedRow, setSelectedRow] = useState<Schedule | null>(null);
-	const [isMeetingLinkModalOpen, setMeetingLinkModalOpen] = useState(false);
-	const [meetingLink, setMeetingLink] = useState("");
-	const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(
-		null
-	);
+
 	const [tableData, setTableData] = useState<Schedule[]>([]);
 
-	const openMeetingLinkModal = (row: { original: Schedule }) => {
-		setSelectedRow(row.original);
-		// Assuming each student has a scheduleId, adjust as needed
-		setSelectedScheduleId(row.original.id);
-		setMeetingLinkModalOpen(true);
-	};
-
-	const closeMeetingLinkModal = () => {
-		setMeetingLinkModalOpen(false);
-		setMeetingLink("");
-		setSelectedScheduleId(null);
-	};
-
-	const openDeleteModal = (row: { original: Schedule }) => {
-		setSelectedRow(row.original);
-		setDeleteModalOpen(true);
-	};
-
-	const closeDeleteModal = () => setDeleteModalOpen(false);
 	const fetchScheduleData = async () => {
 		try {
 			setIsLoading(true);
@@ -114,76 +86,6 @@ const ScheduleTable = () => {
 	useEffect(() => {
 		fetchScheduleData();
 	}, []);
-
-	const handleAddMeetingLink = async () => {
-		// Better URL validation
-		if (!selectedScheduleId) {
-			toast.error("No schedule selected");
-			return;
-		}
-
-		if (!meetingLink) {
-			toast.error("Please provide a meeting link");
-			return;
-		}
-
-		// Basic URL validation
-		try {
-			new URL(meetingLink); // This will throw if URL is invalid
-		} catch (e) {
-			toast.error(
-				"Please provide a valid URL (e.g., https://meet.google.com/abc-xyz)"
-			);
-			return;
-		}
-
-		try {
-			setIsLoading(true);
-			const session = await getSession();
-			const accessToken = session?.accessToken;
-
-			if (!accessToken) {
-				toast.error("Authentication failed");
-				return;
-			}
-
-			const response = await axios.put(
-				`https://api.quanskill.com/api/v1/cohort/add-url/${selectedScheduleId}`,
-				{ url: meetingLink },
-				{
-					headers: {
-						Accept: "application/json",
-						Authorization: `Bearer ${accessToken}`,
-					},
-				}
-			);
-
-			// Check if the API returned an error
-			if (response.data.status === "error") {
-				toast.error(response.data.message || "Failed to add meeting link");
-				return;
-			}
-
-			toast.success("Meeting link added successfully");
-			closeMeetingLinkModal();
-			fetchScheduleData(); // Refresh the data
-		} catch (error: any) {
-			console.error("Error adding meeting link:", error);
-
-			// More specific error messages
-			if (error.response) {
-				toast.error(
-					error.response.data.message || "Failed to add meeting link"
-				);
-			} else if (error.request) {
-				toast.error("No response from server");
-			} else {
-				toast.error("Error setting up request");
-			}
-		} finally {
-			setIsLoading(false);
-		}
-	};
 
 	const formatDateTime = (dateTimeString: string) => {
 		const options: Intl.DateTimeFormatOptions = {
@@ -287,69 +189,7 @@ const ScheduleTable = () => {
 				);
 			},
 		},
-		{
-			id: "actions",
-			header: "Action",
-			cell: ({ row }) => {
-				return (
-					<div className="flex flex-row justify-start items-center gap-5">
-						<Button
-							className="border-[#E8E8E8] border-[1px] text-xs font-medium text-[#6B7280] font-inter"
-							onClick={() => openMeetingLinkModal(row)}>
-							Add Meeting Link
-						</Button>
-						<Button
-							className="border-[#E8E8E8] border-[1px] text-sm font-medium text-[#6B7280] font-inter"
-							onClick={() => openDeleteModal(row)}>
-							<IconTrash />
-						</Button>
-					</div>
-				);
-			},
-		},
 	];
-
-	const handleDelete = async () => {
-		setIsLoading(true);
-		try {
-			const session = await getSession();
-			const accessToken = session?.accessToken;
-
-			if (!accessToken) {
-				console.error("No access token found.");
-				toast.error("Authentication failed.");
-				setIsLoading(false);
-				return;
-			}
-
-			await axios.delete(
-				`https://api.quanskill.com/api/v1/cohort/delete-schedule/${selectedRow?.id}`,
-				{
-					headers: {
-						Accept: "application/json",
-						Authorization: `Bearer ${accessToken}`,
-					},
-				}
-			);
-
-			toast.success("Schedule deleted successfully.");
-			await fetchScheduleData();
-			closeDeleteModal();
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error)) {
-				console.error(
-					"Error deleting schedule:",
-					error.response?.data || error.message
-				);
-				toast.error(`Failed to delete schedule: ${error.message}`);
-			} else {
-				console.error("Unexpected error deleting schedule:", error);
-				toast.error("An unexpected error occurred.");
-			}
-		} finally {
-			setIsLoading(false);
-		}
-	};
 
 	return (
 		<>
@@ -357,65 +197,6 @@ const ScheduleTable = () => {
 				<Loader />
 			) : (
 				<ScheduleDataTable columns={columns} data={tableData} />
-			)}
-
-			{isMeetingLinkModalOpen && (
-				<Modal
-					onClose={closeMeetingLinkModal}
-					isOpen={isMeetingLinkModalOpen}
-					className="w-[500px]">
-					<h3 className="text-lg font-medium mb-4">Add Meeting Link</h3>
-					<p className="mb-4">
-						Update meeting link for {selectedRow?.course_topic.title}
-					</p>
-
-					<div className="mb-4">
-						<input
-							type="url"
-							value={meetingLink}
-							onChange={(e) => setMeetingLink(e.target.value)}
-							placeholder="https://meet.google.com/abc-xyz"
-							className="w-full p-2 border rounded"
-							required
-						/>
-					</div>
-
-					<div className="flex flex-row justify-end items-center gap-3 font-inter mt-4">
-						<Button
-							className="border-[#E8E8E8] border-[1px] text-primary-6 text-xs"
-							onClick={closeMeetingLinkModal}>
-							Cancel
-						</Button>
-						<Button
-							className="bg-secondary-1 text-white font-inter text-xs"
-							onClick={handleAddMeetingLink}
-							disabled={!meetingLink}>
-							Add Link
-						</Button>
-					</div>
-				</Modal>
-			)}
-
-			{isDeleteModalOpen && (
-				<Modal onClose={closeDeleteModal} isOpen={isDeleteModalOpen}>
-					<p>
-						Are you sure you want to delete ({selectedRow?.course_topic?.title}){" "}
-						schedule?
-					</p>
-					<p className="text-sm text-primary-6">This can't be undone</p>
-					<div className="flex flex-row justify-end items-center gap-3 font-inter mt-4">
-						<Button
-							className="border-[#E8E8E8] border-[1px] text-primary-6 text-xs"
-							onClick={closeDeleteModal}>
-							Cancel
-						</Button>
-						<Button
-							className="bg-[#F04F4A] text-white font-inter text-xs modal-delete"
-							onClick={handleDelete}>
-							Yes, Delete
-						</Button>
-					</div>
-				</Modal>
 			)}
 		</>
 	);
