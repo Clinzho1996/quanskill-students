@@ -22,7 +22,7 @@ export default function SignIn() {
 	useEffect(() => {
 		if (status === "authenticated") {
 			toast.success("Login Successful!");
-			router.push("/dashboard");
+			router.push("/");
 		}
 	}, [status, router]);
 
@@ -46,7 +46,7 @@ export default function SignIn() {
 			if (result?.error) {
 				toast.error(result.error);
 			} else {
-				router.push("/dashboard");
+				router.push("/");
 			}
 		} catch (error) {
 			toast.error("Login failed. Please try again.");
