@@ -1,5 +1,4 @@
 "use client";
-import { IconEdit } from "@tabler/icons-react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
@@ -89,41 +88,13 @@ function BasicInfo() {
 			<div className="bg-white rounded-lg shadow-lg p-3 w-full">
 				<div className="flex items-center gap-4">
 					<div className="relative group">
-						{imagePreview ? (
-							<>
-								<Image
-									src={imagePreview}
-									width={50}
-									height={50}
-									alt="Preview"
-									className="rounded-full w-[50px] h-[50px] object-cover"
-								/>
-								<div className="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-									<IconEdit size={16} className="text-white" />
-								</div>
-							</>
-						) : lecturer?.cover_image ? (
-							<Image
-								src={lecturer.cover_image}
-								width={150}
-								height={50}
-								alt="profile"
-								className="rounded-lg w-[150px] h-[80px] object-cover"
-							/>
-						) : (
-							<div className="relative">
-								<Image
-									src="/images/avatar.png"
-									width={50}
-									height={50}
-									alt="profile"
-									className="rounded-full"
-								/>
-								<div className="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-									<IconEdit size={16} className="text-white" />
-								</div>
-							</div>
-						)}
+						<Image
+							src={lecturer.cover_image}
+							width={150}
+							height={50}
+							alt="profile"
+							className="rounded-lg w-[150px] h-[80px] object-cover"
+						/>
 					</div>
 				</div>
 
