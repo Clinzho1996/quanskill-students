@@ -6,6 +6,7 @@ import { IconCalendar } from "@tabler/icons-react";
 import axios from "axios";
 import { format, isSameDay } from "date-fns";
 import { getSession } from "next-auth/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 
@@ -15,6 +16,7 @@ interface Event {
 	course_topic_id: string;
 	session_type: string;
 	date: string;
+	url: string;
 	created_at: string;
 	updated_at: string;
 	course_topic: {
@@ -45,7 +47,7 @@ export function EventCalendar() {
 			}
 
 			const response = await axios.get(
-				"https://api.quanskill.com/api/v1/schedule",
+				"https://api.quanskill.com/api/v1/user/my/schedule",
 				{
 					headers: {
 						Accept: "application/json",
@@ -165,15 +167,26 @@ export function EventCalendar() {
 						<h3 className="font-bold text-lg mb-2">
 							{selectedEvent.course_topic.title}
 						</h3>
-						<p className="text-sm text-gray-600 mb-2">
+						<p className="text-sm">
+							<span className="font-semibold">Date & Time:</span>{" "}
 							{format(new Date(selectedEvent.date), "PPPPp")}
 						</p>
 						<p className="text-sm">
 							<span className="font-semibold">Session Type:</span>{" "}
 							{selectedEvent.session_type}
 						</p>
-						<p className="text-sm mt-2">
+						<p className="text-sm">
+							<span className="font-semibold">Description:</span>{" "}
 							{selectedEvent.course_topic.description}
+						</p>
+						<p className="text-sm">
+							<span className="font-semibold">Join Class:</span>{" "}
+							<Link
+								href={selectedEvent.url}
+								target="_blank"
+								className="text-secondary-1 underline">
+								{selectedEvent.url}
+							</Link>
 						</p>
 					</div>
 				) : (
