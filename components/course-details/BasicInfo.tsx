@@ -27,8 +27,6 @@ function BasicInfo() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [lecturer, setLecturer] = useState<Lecturer | null>(null);
 
-	const [imagePreview, setImagePreview] = useState<string | null>(null);
-
 	const fetchLecturerData = async () => {
 		try {
 			setIsLoading(true);
