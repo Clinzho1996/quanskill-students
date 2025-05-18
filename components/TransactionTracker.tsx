@@ -68,8 +68,6 @@ export function EventCalendar() {
 		fetchEvents();
 	}, []);
 
-	const eventDays = events.map((event) => new Date(event.date));
-
 	const dayHasEvent = (day: Date) => {
 		return events.some((event) => isSameDay(new Date(event.date), day));
 	};

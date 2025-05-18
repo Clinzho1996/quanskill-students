@@ -13,7 +13,6 @@ export default function ForgotPassword() {
 	const { status } = useSession();
 	const date = new Date();
 	const router = useRouter();
-	const [showPassword, setShowPassword] = useState(false);
 
 	const [form, setForm] = useState({ email: "", password: "" });
 	const [isLoading, setIsLoading] = useState(false);

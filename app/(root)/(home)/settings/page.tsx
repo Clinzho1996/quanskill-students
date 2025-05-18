@@ -8,8 +8,18 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
+interface User {
+	id: string;
+	first_name: string;
+	last_name: string;
+	email: string;
+	pic: string | null;
+	phone: string;
+	gender: string;
+}
+
 function Settings() {
-	const [user, setUser] = useState<any>(null);
+	const [user, setUser] = useState<User | null>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -112,6 +122,7 @@ function Settings() {
 		}
 	};
 
+	isFetchingUser && <div>Loading...</div>;
 	return (
 		<div className="bg-[#F6F8F9] min-h-screen">
 			<HeaderBox />

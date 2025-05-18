@@ -4,7 +4,7 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 interface Lecturer {
@@ -25,19 +25,10 @@ interface Lecturer {
 
 function BasicInfo() {
 	const { id } = useParams();
-	const [isModalOpen, setModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [lecturer, setLecturer] = useState<Lecturer | null>(null);
-	const [formData, setFormData] = useState({
-		title: "",
-		category: "",
-		email: "",
-		phone: "",
-		gender: "male",
-	});
-	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
-	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const fetchLecturerData = async () => {
 		try {
@@ -63,13 +54,6 @@ function BasicInfo() {
 
 			const data = response.data.data;
 			setLecturer(data);
-			setFormData({
-				title: data.title,
-				category: data.category,
-				email: data.email,
-				phone: data.phone,
-				gender: data.gender,
-			});
 		} catch (error) {
 			console.error("Error fetching lecturer data:", error);
 			toast.error("Failed to fetch lecturer data");
@@ -83,35 +67,6 @@ function BasicInfo() {
 			fetchLecturerData();
 		}
 	}, [id]);
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	const handleGenderChange = (value: string) => {
-		setFormData((prev) => ({
-			...prev,
-			gender: value,
-		}));
-	};
-
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0];
-			setSelectedFile(file);
-
-			// Create preview URL
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImagePreview(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-		}
-	};
 
 	const formatDate = (dateString: string) => {
 		const options: Intl.DateTimeFormatOptions = {
