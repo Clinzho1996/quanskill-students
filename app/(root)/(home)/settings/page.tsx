@@ -122,7 +122,13 @@ function Settings() {
 		}
 	};
 
-	isFetchingUser && <div>Loading...</div>;
+	if (isFetchingUser) {
+		return (
+			<div className="flex justify-center items-center h-64">
+				<p>Loading user data...</p>
+			</div>
+		);
+	}
 	return (
 		<div className="bg-[#F6F8F9] min-h-screen">
 			<HeaderBox />
