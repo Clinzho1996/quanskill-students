@@ -127,7 +127,7 @@ function UserInfo() {
 								img="/images/coh4.png"
 							/>
 							<CohortsCard
-								title="Open Cohorts"
+								title="Active Cohorts"
 								data={analyticsData.active_or_open_cohorts.toString()}
 								difference={1.2}
 								img="/images/coh2.png"
