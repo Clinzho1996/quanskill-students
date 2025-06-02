@@ -28,6 +28,9 @@ interface AnalyticsData {
 	open_cohorts: number;
 	active_cohorts: number;
 	completed_cohorts: number;
+	total_cohorts_registered: number;
+	active_or_open_cohorts: number;
+	total_courses_enrolled: number;
 }
 
 interface ApiResponse {
@@ -53,7 +56,7 @@ function UserInfo() {
 			}
 
 			const response = await axios.get<ApiResponse>(
-				"https://api.quanskill.com/api/v1/analytics",
+				"https://api.quanskill.com/api/v1/analytics/student",
 				{
 					headers: {
 						Accept: "application/json",
@@ -90,37 +93,25 @@ function UserInfo() {
 						<div className="flex flex-row justify-start gap-1 items-center">
 							<IconCircleFilled size={10} color="#6E3FF3" />
 							<p className="text-sm font-normal text-[#6B7280] text-[12px]">
-								Courses
+								Total
 							</p>
 						</div>
 						<div className="flex flex-row justify-start gap-1 items-center">
 							<IconCircleFilled size={10} color="#35B9E9" />
 							<p className="text-sm font-normal text-[#6B7280] text-[12px]">
-								Lecturers
+								Active
 							</p>
 						</div>
 						<div className="flex flex-row justify-start gap-1 items-center">
 							<IconCircleFilled size={10} color="#FF9100" />
 							<p className="text-sm font-normal text-[#6B7280] text-[12px]">
-								Student
+								Completed
 							</p>
 						</div>
 						<div className="flex flex-row justify-start gap-1 items-center">
-							<IconCircleFilled size={10} color="#FF5000" />
+							<IconCircleFilled size={10} color="#3F8140" />
 							<p className="text-sm font-normal text-[#6B7280] text-[12px]">
 								Enrollment
-							</p>
-						</div>
-						<div className="flex flex-row justify-start gap-1 items-center">
-							<IconCircleFilled size={10} color="#0B2F9F" />
-							<p className="text-sm font-normal text-[#6B7280] text-[12px]">
-								Cohort
-							</p>
-						</div>
-						<div className="flex flex-row justify-start gap-1 items-center">
-							<IconCircleFilled size={10} color="#2A8D63" />
-							<p className="text-sm font-normal text-[#6B7280] text-[12px]">
-								Revenue
 							</p>
 						</div>
 					</div>
@@ -130,41 +121,27 @@ function UserInfo() {
 					<>
 						<div className="p-3 flex flex-row justify-start border-[#E2E4E9] items-center gap-3 w-full">
 							<CohortsCard
-								title="Total Posts"
-								data={analyticsData.posts.toString()}
+								title="Total Cohorts"
+								data={analyticsData.total_cohorts_registered.toString()}
 								difference={0.24}
 								img="/images/coh4.png"
 							/>
 							<CohortsCard
-								title="Total Lecturers"
-								data={analyticsData.lecturers.toString()}
+								title="Open Cohorts"
+								data={analyticsData.active_or_open_cohorts.toString()}
 								difference={1.2}
 								img="/images/coh2.png"
 							/>
 							<CohortsCard
-								title="Total Students"
-								data={analyticsData.students.toString()}
+								title="Completed Cohorts"
+								data={analyticsData.completed_cohorts.toString()}
 								difference={0.21}
 								img="/images/coh3.png"
 							/>
-						</div>
-						<div className="p-3 flex flex-row justify-start border-[#E2E4E9] items-center gap-3 w-full">
 							<CohortsCard
-								title="Active Lecturers"
-								data={analyticsData.active_lecturers.toString()}
-								difference={1.01}
-								img="/images/coh5.png"
-							/>
-							<CohortsCard
-								title="Total Cohorts"
-								data={analyticsData.cohorts.toString()}
-								difference={0.22}
-								img="/images/coh6.png"
-							/>
-							<CohortsCard
-								title="Open Cohorts"
-								data={analyticsData.open_cohorts.toString()}
-								difference={0.12}
+								title="Total Courses Enrolled"
+								data={analyticsData.total_courses_enrolled.toString()}
+								difference={0.21}
 								img="/images/coh1.png"
 							/>
 						</div>
