@@ -129,7 +129,7 @@ export function CohortStudentDataTable<TData, TValue>({
 							width={20}
 						/>
 						<p className="text-sm text-dark-1 font-medium font-inter">
-							Enrolled Studendts
+							Enrolled Students
 						</p>
 					</div>
 
