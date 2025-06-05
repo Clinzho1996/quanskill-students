@@ -35,6 +35,7 @@ export interface Schedule {
 	course_topic_id: string;
 	session_type: string;
 	date: string;
+	time: string;
 	url: string | null;
 	created_at: string;
 	updated_at: string;
@@ -87,16 +88,28 @@ const ScheduleTable = () => {
 		fetchScheduleData();
 	}, []);
 
-	const formatDateTime = (dateTimeString: string) => {
+	const formatDateTime = (dateString: string, timeString: string) => {
+		const [year, month, day] = dateString.split(" ")[0].split("-");
+		const [hours, minutes] = timeString.split(":");
+
+		const date = new Date(
+			parseInt(year),
+			parseInt(month) - 1, // months are 0-indexed
+			parseInt(day),
+			parseInt(hours),
+			parseInt(minutes)
+		);
+
 		const options: Intl.DateTimeFormatOptions = {
 			year: "numeric",
 			month: "long",
 			day: "numeric",
 			hour: "2-digit",
 			minute: "2-digit",
+			hour12: true,
 		};
-		const parsedDate = new Date(dateTimeString);
-		return new Intl.DateTimeFormat("en-US", options).format(parsedDate);
+
+		return new Intl.DateTimeFormat("en-US", options).format(date);
 	};
 
 	// Define table columns
@@ -159,10 +172,11 @@ const ScheduleTable = () => {
 			accessorKey: "date",
 			header: "Date & Time",
 			cell: ({ row }) => {
-				const dateTime = row.getValue<string>("date");
+				const date = row.getValue<string>("date");
+				const time = row.original.time;
 				return (
 					<span className="text-xs text-primary-6">
-						{formatDateTime(dateTime)}
+						{formatDateTime(date, time)}
 					</span>
 				);
 			},
