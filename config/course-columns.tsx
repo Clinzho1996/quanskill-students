@@ -13,23 +13,24 @@ import { useEffect, useState } from "react";
 import { CourseDataTable } from "./course-table";
 
 interface ApiResponse {
-	data: Course[];
+	courses: Course[];
 }
 
 export interface Course {
-	id: string;
-	title: string;
-	amount: string;
-	overview: string | null;
-	level: string;
-	cover_image: string | null;
-	category_id: string;
-	created_at: string;
-	updated_at: string;
-	category: {
-		id: string;
-		name: string;
-		created_at: string;
+	id?: string;
+	title?: string;
+	amount?: string;
+	overview?: string | null;
+	level?: string;
+	courses?: Course[];
+	cover_image?: string | null;
+	category_id?: string;
+	created_at?: string;
+	updated_at?: string;
+	category?: {
+		id?: string;
+		name?: string;
+		created_at?: string;
 		updated_at: string;
 	};
 }
@@ -66,7 +67,7 @@ const CourseTable = () => {
 			}
 
 			const response = await axios.get<ApiResponse>(
-				"https://api.quanskill.com/api/v1/course",
+				"https://api.quanskill.com/api/v1/user/all/courses",
 				{
 					headers: {
 						Accept: "application/json",
@@ -75,7 +76,7 @@ const CourseTable = () => {
 				}
 			);
 
-			setTableData(response.data.data);
+			setTableData(response.data.courses);
 		} catch (error) {
 			console.error("Error fetching course data:", error);
 		} finally {
@@ -199,7 +200,7 @@ const CourseTable = () => {
 			accessorKey: "category.name",
 			header: "Category",
 			cell: ({ row }) => {
-				const category = row.original.category.name;
+				const category = row.original.category?.name;
 				return (
 					<span className="text-xs text-primary-6 capitalize">{category}</span>
 				);

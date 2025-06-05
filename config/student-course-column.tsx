@@ -64,7 +64,7 @@ const StudentCourseTable = () => {
 			}
 
 			const response = await axios.get<ApiResponse>(
-				`https://api.quanskill.com/api/v1/user/student/courses/${id}`,
+				`https://api.quanskill.com/api/v1/user/all/courses`,
 				{
 					headers: {
 						Accept: "application/json",

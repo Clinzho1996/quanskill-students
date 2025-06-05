@@ -59,10 +59,9 @@ export function CourseDataTable<TData, TValue>({
 	);
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({});
-	const [selectedStatus, setSelectedStatus] = useState<string>("View All");
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [globalFilter, setGlobalFilter] = useState("");
-	const [tableData, setTableData] = useState<TData[]>(data);
+	const [tableData, setTableData] = useState<TData[]>(data || []);
 	const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
 	useEffect(() => {
@@ -167,7 +166,7 @@ export function CourseDataTable<TData, TValue>({
 					))}
 				</TableHeader>
 				<TableBody className="bg-white">
-					{table.getRowModel().rows?.length ? (
+					{table.getRowModel().rows.length ? (
 						table.getRowModel().rows.map((row) => (
 							<TableRow
 								key={row.id}
