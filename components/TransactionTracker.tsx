@@ -11,12 +11,12 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 
 interface Event {
-	id: string;
-	cohort_id: string;
+	id?: string;
+	cohort_id?: string;
 	course_topic_id: string;
 	session_type: string;
 	date: string;
-	url: string;
+	url?: string | null;
 	created_at: string;
 	updated_at: string;
 	course_topic: {
@@ -182,10 +182,10 @@ export function EventCalendar() {
 						<p className="text-sm">
 							<span className="font-semibold">Join Class:</span>{" "}
 							<Link
-								href={selectedEvent.url}
+								href={selectedEvent?.url ?? "#"}
 								target="_blank"
 								className="text-secondary-1 underline">
-								{selectedEvent.url}
+								{selectedEvent?.url ?? "No link available"}
 							</Link>
 						</p>
 					</div>
