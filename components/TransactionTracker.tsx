@@ -16,6 +16,7 @@ interface Event {
 	course_topic_id: string;
 	session_type: string;
 	date: string;
+	time: string;
 	url?: string | null;
 	created_at: string;
 	updated_at: string;
@@ -167,9 +168,15 @@ export function EventCalendar() {
 						<h3 className="font-bold text-lg mb-2">
 							{selectedEvent.course_topic.title}
 						</h3>
+
 						<p className="text-sm">
 							<span className="font-semibold">Date & Time:</span>{" "}
-							{format(new Date(selectedEvent.date), "PPPPp")}
+							{format(
+								new Date(
+									`${selectedEvent.date.split(" ")[0]}T${selectedEvent.time}`
+								),
+								"PPPP 'at' h:mm a"
+							)}
 						</p>
 						<p className="text-sm">
 							<span className="font-semibold">Session Type:</span>{" "}

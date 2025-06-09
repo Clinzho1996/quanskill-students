@@ -343,22 +343,7 @@ const CohortStudentTable = () => {
 				);
 			},
 		},
-		{
-			accessorKey: "email",
-			header: ({ column }) => (
-				<Button
-					variant="ghost"
-					className="text-[13px] text-left"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-					Email address
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			),
-			cell: ({ row }) => {
-				const email = row.getValue<string>("email");
-				return <span className="text-xs text-primary-6">{email}</span>;
-			},
-		},
+
 		{
 			accessorKey: "created_at",
 			header: "Date Joined",
