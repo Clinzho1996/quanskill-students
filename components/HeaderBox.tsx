@@ -36,7 +36,7 @@ function HeaderBox() {
 					<Button className="bg-primary-1 text-white">
 						<Image src="/images/zalo.png" alt="zalo" width={20} height={20} />{" "}
 						Join Zalo Community
-					</Button>{" "}
+					</Button>
 				</Link>
 				<Link
 					href="https://facebook.com/groups/771116585386998"
