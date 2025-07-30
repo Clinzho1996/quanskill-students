@@ -1,6 +1,9 @@
 "use client";
+import { IconBrandFacebookFilled } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 function HeaderBox() {
 	const { data: session } = useSession();
@@ -29,6 +32,19 @@ function HeaderBox() {
 				</div>
 			)}
 			<div className="hidden lg:flex flex-row justify-start gap-1 items-center">
+				<Link href="https://zalo.me/g/mixlfz006" target="_blank">
+					<Button className="bg-primary-1 text-white">
+						<Image src="/images/zalo.png" alt="zalo" width={20} height={20} />{" "}
+						Join Zalo Community
+					</Button>{" "}
+				</Link>
+				<Link
+					href="https://facebook.com/groups/771116585386998"
+					target="_blank">
+					<Button className="bg-secondary-1 text-white">
+						<IconBrandFacebookFilled /> Join Facebook Community
+					</Button>
+				</Link>
 				{session?.user && (
 					<div className="md:flex flex-row justify-end gap-2 items-center mx-1 px-2">
 						<div className="flex p-1 bg-primary-1 justify-center items-center border-[1px] border-dark-3 rounded-full overflow-hidden">

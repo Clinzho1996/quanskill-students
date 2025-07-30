@@ -106,7 +106,17 @@ function Settings() {
 
 			toast.success("Profile picture updated successfully");
 
-			// Refetch profile
+			// Force refresh by adding timestamp to user.pic
+			setUser((prev) =>
+				prev
+					? {
+							...prev,
+							pic: prev.pic ? `${prev.pic}?${new Date().getTime()}` : null,
+					  }
+					: null
+			);
+
+			// Alternatively, refetch the entire profile
 			await fetchUserProfile();
 
 			setImagePreview(null);
