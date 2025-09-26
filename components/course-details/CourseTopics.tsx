@@ -45,6 +45,12 @@ function CourseTopics() {
 	const [resources, setResources] = useState<ResourceItem[]>([]);
 	const [isLoadingResources, setIsLoadingResources] = useState(false);
 
+	const getPdfViewerUrl = (fileUrl: string) => {
+		return `https://docs.google.com/gview?url=${encodeURIComponent(
+			fileUrl
+		)}&embedded=true`;
+	};
+
 	const fetchLecturerData = async () => {
 		try {
 			setIsLoading(true);
@@ -172,18 +178,41 @@ function CourseTopics() {
 										No resources available
 									</p>
 								) : (
-									<div className="space-y-2">
+									<div className="space-y-4">
 										{resources.map((resource) => (
 											<div
 												key={resource.id}
-												className="flex items-center gap-2 p-2 bg-white rounded border">
-												<a
-													href={resource.file || resource.external_link}
-													target="_blank"
-													rel="noopener noreferrer"
-													className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+												className="bg-white rounded border p-3">
+												<h4 className="text-sm font-medium mb-2">
 													{resource.name}
-												</a>
+												</h4>
+												{resource.file && resource.file.endsWith(".pdf") ? (
+													<div className="border rounded">
+														<iframe
+															src={getPdfViewerUrl(resource.file)}
+															className="w-full h-96"
+															frameBorder="0"
+															title={`PDF Viewer - ${resource.name}`}>
+															<p>
+																Your browser does not support iframes.{" "}
+																<a
+																	href={resource.file}
+																	target="_blank"
+																	rel="noopener noreferrer">
+																	View PDF
+																</a>
+															</p>
+														</iframe>
+													</div>
+												) : (
+													<a
+														href={resource.file || resource.external_link}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+														{resource.name}
+													</a>
+												)}
 											</div>
 										))}
 									</div>
